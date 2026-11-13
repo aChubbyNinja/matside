@@ -69,13 +69,13 @@ export function icon(name, filled = false) {
     s('path', { d: ICONS[name] || '' }));
 }
 
-/** The mark: a wrestling mat seen from above, in red, white and blue. To use your own colours, change them here and in icon.svg. */
+/** The mark: a wrestling mat seen from above: a red ring and a blue centre on black. To use your own colours, change them here and in icon.svg. */
 export function logo() {
   return s('svg', { viewBox: '0 0 32 32', fill: 'none', 'aria-hidden': 'true' },
-    s('rect', { x: 2, y: 2, width: 28, height: 28, rx: 8, fill: '#c3232b' }),
-    s('circle', { cx: 16, cy: 16, r: 7.4, stroke: '#fff', 'stroke-width': 2 }),
-    s('circle', { cx: 16, cy: 16, r: 3.3, fill: '#fff' }),
-    s('circle', { cx: 16, cy: 16, r: 2.1, fill: '#0282c8' }));
+    // the faint outline keeps the black tile visible on the dark appearance
+    s('rect', { x: 2, y: 2, width: 28, height: 28, rx: 8, fill: '#0e0e0f', stroke: 'rgba(255, 255, 255, 0.18)', 'stroke-width': 1 }),
+    s('circle', { cx: 16, cy: 16, r: 7.4, stroke: '#c3232b', 'stroke-width': 2.4 }),
+    s('circle', { cx: 16, cy: 16, r: 2.6, fill: '#0282c8' }));
 }
 
 // ---------------------------------------------------------------- server
