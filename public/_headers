@@ -1,0 +1,14 @@
+# The tracking snippet may be cached for an hour, so a new version reaches every site the same day.
+/t.js
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
+  X-Content-Type-Options: nosniff
+
+# The dashboard itself: never framed, never indexed, and it may only load its own files.
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: same-origin
+  X-Robots-Tag: noindex, nofollow
+  Strict-Transport-Security: max-age=31536000
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'

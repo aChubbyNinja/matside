@@ -1,0 +1,37 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "matside",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+
+  // The dashboard and the tracking snippet are plain files in public/. Only the two paths below
+  // run the Worker; everything else is served straight from Cloudflare's edge for free.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/e"]
+  },
+
+  // No database_id on purpose: the first `wrangler deploy` creates the database for you.
+  "d1_databases": [{ "binding": "DB", "database_name": "matside" }],
+
+  // Every 15 minutes: summarise finished days, refresh integrations.
+  "triggers": { "crons": ["*/15 * * * *"] },
+
+  // Error logs are kept; per-request logs are not, because Cloudflare's request logs include each
+  // visitor's IP address and Matside's promise is that those are never kept.
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } },
+
+  // At most 120 reports a minute from one address to one website, enforced by Cloudflare before
+  // anything is written. Remove this block if your plan does not offer rate limiting; Matside then
+  // falls back to a rougher limit of its own.
+  "ratelimits": [{ "name": "LIMITER", "namespace_id": "7301", "simple": { "limit": 120, "period": 60 } }]
+
+  // Optional settings (add a "vars" block, or use the Cloudflare dashboard):
+  //   RAW_RETENTION_DAYS  how long individual visits are kept (default 400; 0 keeps them for good).
+  //                       Daily summaries are always kept.
+  //   PBKDF2_ITERATIONS   password stretching rounds, 10000-100000 (default 100000).
+  //   DEMO                "1" turns the dashboard into a public, read-only demo.
+  //   SETUP_CODE          if set, choosing the first password needs the link /#setup=<code>.
+}
